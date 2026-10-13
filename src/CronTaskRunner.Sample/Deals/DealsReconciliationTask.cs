@@ -24,6 +24,12 @@ public sealed class DealsReconciliationTask(
 
     protected override async Task<DealsSnapshot> GetDataAsync(CancellationToken cancellationToken)
     {
+        if (options.Value.To.Count == 0)
+        {
+            throw new InvalidOperationException(
+                "Options:To события должен быть массивом адресов минимум из одного получателя");
+        }
+
         var lookbackDays = options.Value.LookbackDays;
         if (lookbackDays < 1)
         {

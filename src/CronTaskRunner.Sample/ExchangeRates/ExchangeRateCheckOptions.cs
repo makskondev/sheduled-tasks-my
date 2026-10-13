@@ -6,8 +6,8 @@ namespace CronTaskRunner.Sample.ExchangeRates;
 /// </summary>
 public sealed class ExchangeRateCheckOptions
 {
-    /// <summary>Адрес для уведомлений.</summary>
-    public string To { get; set; } = string.Empty;
+    /// <summary>Адреса получателей уведомлений (массив, минимум один).</summary>
+    public List<string> To { get; set; } = [];
 
     /// <summary>Порог изменения курса в процентах, начиная с которого шлём письмо.</summary>
     public decimal ThresholdPercent { get; set; } = 1.5m;

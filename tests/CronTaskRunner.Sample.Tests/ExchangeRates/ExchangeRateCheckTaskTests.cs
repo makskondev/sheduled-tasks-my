@@ -14,7 +14,7 @@ public class ExchangeRateCheckTaskTests
         await CreateTask(previous: 100m, current: 102m).RunAsync(CancellationToken.None);
 
         var message = Assert.Single(_email.Sent);
-        Assert.Equal("fx@test", message.To);
+        Assert.Equal(["fx@test"], message.To);
         Assert.Equal("Курс изменился на 2.00 (2.00%)", message.Subject);
     }
 
@@ -26,11 +26,24 @@ public class ExchangeRateCheckTaskTests
         Assert.Empty(_email.Sent);
     }
 
+    [Fact]
+    public async Task NoRecipients_FailsBeforeLoadingData()
+    {
+        var task = new ExchangeRateCheckTask(
+            new StubRateProvider(100m, 102m),
+            _email,
+            new TestEventOptions<ExchangeRateCheckOptions>(new()),
+            NullLogger<ExchangeRateCheckTask>.Instance);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => task.RunAsync(CancellationToken.None));
+        Assert.Empty(_email.Sent);
+    }
+
     private ExchangeRateCheckTask CreateTask(decimal previous, decimal current) =>
         new(
             new StubRateProvider(previous, current),
             _email,
-            new TestEventOptions<ExchangeRateCheckOptions>(new() { To = "fx@test", ThresholdPercent = 1.5m }),
+            new TestEventOptions<ExchangeRateCheckOptions>(new() { To = ["fx@test"], ThresholdPercent = 1.5m }),
             NullLogger<ExchangeRateCheckTask>.Instance);
 
     private sealed class StubRateProvider(decimal previous, decimal current) : IExchangeRateProvider

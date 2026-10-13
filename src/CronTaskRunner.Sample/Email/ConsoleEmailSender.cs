@@ -12,7 +12,7 @@ public sealed class ConsoleEmailSender(ILogger<ConsoleEmailSender> logger) : IEm
     {
         logger.LogInformation(
             "EMAIL -> {To} | {Subject} | isHtml={IsHtml} | {Body}",
-            message.To, message.Subject, message.IsHtml, message.Body);
+            string.Join(", ", message.To), message.Subject, message.IsHtml, message.Body);
         return Task.CompletedTask;
     }
 }

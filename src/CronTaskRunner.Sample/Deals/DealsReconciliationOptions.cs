@@ -6,8 +6,8 @@ namespace CronTaskRunner.Sample.Deals;
 /// </summary>
 public sealed class DealsReconciliationOptions
 {
-    /// <summary>Адрес для отчёта о расхождениях.</summary>
-    public string To { get; set; } = string.Empty;
+    /// <summary>Адреса получателей отчёта о расхождениях (массив, минимум один).</summary>
+    public List<string> To { get; set; } = [];
 
     /// <summary>Сколько последних закрытых дней сверять (текущий день не берётся).</summary>
     public int LookbackDays { get; set; } = 1;

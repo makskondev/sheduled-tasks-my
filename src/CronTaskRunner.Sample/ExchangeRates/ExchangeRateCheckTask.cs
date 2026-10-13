@@ -20,6 +20,12 @@ public sealed class ExchangeRateCheckTask(
 
     protected override async Task<ExchangeRateData> GetDataAsync(CancellationToken cancellationToken)
     {
+        if (options.Value.To.Count == 0)
+        {
+            throw new InvalidOperationException(
+                "Options:To события должен быть массивом адресов минимум из одного получателя");
+        }
+
         logger.LogInformation("[{Task}] Получаем текущий и предыдущий курс", Name);
 
         var current = await rateProvider.GetCurrentRateAsync(cancellationToken);

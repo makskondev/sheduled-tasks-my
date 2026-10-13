@@ -37,7 +37,7 @@ public class DealsReconciliationTaskTests
         await CreateTask(sources).RunAsync(CancellationToken.None);
 
         var message = Assert.Single(_email.Sent);
-        Assert.Equal("recon@test", message.To);
+        Assert.Equal(["recon@test", "risk@test"], message.To);
         Assert.True(message.IsHtml);
         Assert.Equal("Сверка сделок: найдено расхождений — 3", message.Subject);
     }
@@ -55,6 +55,21 @@ public class DealsReconciliationTaskTests
         await CreateTask(sources).RunAsync(CancellationToken.None);
 
         Assert.Empty(_email.Sent);
+    }
+
+    [Fact]
+    public async Task NoRecipients_FailsBeforeLoadingData()
+    {
+        var source = new RecordingSource("A");
+        var task = new DealsReconciliationTask(
+            [source, new RecordingSource("B")],
+            _email,
+            new TestEventOptions<DealsReconciliationOptions>(new() { To = [] }),
+            new FakeTimeProvider(Now),
+            NullLogger<DealsReconciliationTask>.Instance);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => task.RunAsync(CancellationToken.None));
+        Assert.Null(source.RequestedPeriod);
     }
 
     [Fact]
@@ -76,7 +91,7 @@ public class DealsReconciliationTaskTests
         new(
             sources,
             _email,
-            new TestEventOptions<DealsReconciliationOptions>(new() { To = "recon@test", LookbackDays = lookbackDays }),
+            new TestEventOptions<DealsReconciliationOptions>(new() { To = ["recon@test", "risk@test"], LookbackDays = lookbackDays }),
             new FakeTimeProvider(Now),
             NullLogger<DealsReconciliationTask>.Instance);
 

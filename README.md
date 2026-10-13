@@ -77,7 +77,7 @@ builder.Services.AddScheduledTask<MyTask>("MyTask");
       "TaskKey": "MyTask",
       "CronExpressions": [ "0 12 * * *", "30 18 * * *" ],
       "Options": {
-        "To": "alerts@company.com"
+        "To": [ "alerts@company.com", "ops@company.com" ]
       }
     }
   ]
@@ -91,6 +91,10 @@ builder.Services.AddScheduledTask<MyTask>("MyTask");
 (например, сверка за 1 день каждую ночь и за 7 дней по воскресеньям).
 Нет `Options` — задача получит значения по умолчанию из своего класса настроек.
 
+`To` — всегда массив, даже для одного адреса. Строка вместо массива
+(`"To": "a@b.c"`) не привязывается и даст пустой список; задача в этом случае
+упадёт сразу при старте запуска с понятным сообщением, а не после загрузки данных.
+
 ## Конфигурация
 
 | Ключ | Что задаёт | Без рестарта |
@@ -98,9 +102,9 @@ builder.Services.AddScheduledTask<MyTask>("MyTask");
 | `ScheduledEvents:Events[]:Enabled` | включить/выключить событие | да, в течение минуты |
 | `ScheduledEvents:Events[]:CronExpressions` | расписание, срабатывает по любому из выражений | да, в течение минуты |
 | `ScheduledEvents:Events[]:Name`, `TaskKey` | имя события для логов, ключ задачи | нет |
-| `ScheduledEvents:Events[]:Options:To` (событие с `TaskKey` = `DealsReconciliation`) | адрес отчёта о расхождениях | да, со следующего запуска |
+| `ScheduledEvents:Events[]:Options:To` (событие с `TaskKey` = `DealsReconciliation`) | адреса получателей отчёта о расхождениях (массив) | да, со следующего запуска |
 | `ScheduledEvents:Events[]:Options:LookbackDays` (`DealsReconciliation`) | сколько закрытых дней сверять (по умолчанию 1) | да, со следующего запуска |
-| `ScheduledEvents:Events[]:Options:To`, `ThresholdPercent` (`ExchangeRateCheck`) | адрес и порог изменения курса, % | да, со следующего запуска |
+| `ScheduledEvents:Events[]:Options:To`, `ThresholdPercent` (`ExchangeRateCheck`) | получатели (массив) и порог изменения курса, % | да, со следующего запуска |
 | `DealsReconciliation:UseInMemorySources` | демо-данные вместо MSSQL/Oracle (глобальный переключатель регистрации) | нет |
 | `Smtp:Enabled` | `true` — слать через SMTP, `false` — писать в лог | нет |
 | `Smtp:Host`, `Port`, `EnableSsl`, `User`, `Password`, `From` | параметры SMTP; пустой `User` — без аутентификации | да |
@@ -113,7 +117,8 @@ Cron в 5-полевом формате: `минута час день-меся�
 `Smtp__Password`, `ConnectionStrings__MssqlDeals` и т.д.
 
 Переопределение `Options` переменной окружения привязано к индексу события:
-`ScheduledEvents__Events__1__Options__To`. Порядок событий в `appsettings.json`
+`ScheduledEvents__Events__1__Options__To__0` (для массива — по переменной на
+элемент: `...__To__0`, `...__To__1`). Порядок событий в `appsettings.json`
 меняйте осторожно — индексы в ConfigMap и переменных сдвинутся.
 
 ## Как ведёт себя планировщик

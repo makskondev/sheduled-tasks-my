@@ -14,18 +14,21 @@ public class EventOptionsTests
         using var services = Build(new()
         {
             ["ScheduledEvents:Events:0:Name"] = "Nightly",
-            ["ScheduledEvents:Events:0:Options:To"] = "night@test",
+            ["ScheduledEvents:Events:0:Options:To:0"] = "night@test",
+            ["ScheduledEvents:Events:0:Options:To:1"] = "night2@test",
             ["ScheduledEvents:Events:0:Options:Days"] = "1",
             ["ScheduledEvents:Events:1:Name"] = "Weekly",
-            ["ScheduledEvents:Events:1:Options:To"] = "week@test",
+            ["ScheduledEvents:Events:1:Options:To:0"] = "week@test",
             ["ScheduledEvents:Events:1:Options:Days"] = "7",
         });
 
         var nightly = Resolve(services, "Nightly");
         var weekly = Resolve(services, "Weekly");
 
-        Assert.Equal(("night@test", 1), (nightly.To, nightly.Days));
-        Assert.Equal(("week@test", 7), (weekly.To, weekly.Days));
+        Assert.Equal(["night@test", "night2@test"], nightly.To);
+        Assert.Equal(1, nightly.Days);
+        Assert.Equal(["week@test"], weekly.To);
+        Assert.Equal(7, weekly.Days);
     }
 
     [Fact]
@@ -34,10 +37,10 @@ public class EventOptionsTests
         using var services = Build(new()
         {
             ["ScheduledEvents:Events:0:Name"] = "Nightly",
-            ["ScheduledEvents:Events:0:Options:To"] = "night@test",
+            ["ScheduledEvents:Events:0:Options:To:0"] = "night@test",
         });
 
-        Assert.Equal("night@test", Resolve(services, "NIGHTLY").To);
+        Assert.Equal(["night@test"], Resolve(services, "NIGHTLY").To);
     }
 
     [Fact]
@@ -50,7 +53,7 @@ public class EventOptionsTests
 
         var options = Resolve(services, "Nightly");
 
-        Assert.Equal(string.Empty, options.To);
+        Assert.Empty(options.To);
         Assert.Equal(1, options.Days);
     }
 
@@ -60,7 +63,7 @@ public class EventOptionsTests
         var source = new Dictionary<string, string?>
         {
             ["ScheduledEvents:Events:0:Name"] = "Nightly",
-            ["ScheduledEvents:Events:0:Options:To"] = "old@test",
+            ["ScheduledEvents:Events:0:Options:To:0"] = "old@test",
         };
         var config = new ConfigurationBuilder().AddInMemoryCollection(source).Build();
         using var services = BuildFrom(config);
@@ -68,15 +71,15 @@ public class EventOptionsTests
         using var firstRun = services.CreateScope();
         SetEvent(firstRun, "Nightly");
         var firstOptions = firstRun.ServiceProvider.GetRequiredService<IEventOptions<TestOptions>>();
-        Assert.Equal("old@test", firstOptions.Value.To);
+        Assert.Equal(["old@test"], firstOptions.Value.To);
 
-        config["ScheduledEvents:Events:0:Options:To"] = "new@test";
+        config["ScheduledEvents:Events:0:Options:To:0"] = "new@test";
 
-        Assert.Equal("old@test", firstOptions.Value.To);
+        Assert.Equal(["old@test"], firstOptions.Value.To);
 
         using var nextRun = services.CreateScope();
         SetEvent(nextRun, "Nightly");
-        Assert.Equal("new@test", nextRun.ServiceProvider.GetRequiredService<IEventOptions<TestOptions>>().Value.To);
+        Assert.Equal(["new@test"], nextRun.ServiceProvider.GetRequiredService<IEventOptions<TestOptions>>().Value.To);
     }
 
     [Fact]
@@ -109,7 +112,7 @@ public class EventOptionsTests
 
     public sealed class TestOptions
     {
-        public string To { get; set; } = string.Empty;
+        public List<string> To { get; set; } = [];
 
         public int Days { get; set; } = 1;
     }
