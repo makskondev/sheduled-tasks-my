@@ -1,0 +1,45 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronTaskRunner.Core", "src\CronTaskRunner.Core\CronTaskRunner.Core.csproj", "{A1B2C3D4-0001-4E5F-8A9B-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronTaskRunner.Sample", "src\CronTaskRunner.Sample\CronTaskRunner.Sample.csproj", "{A1B2C3D4-0002-4E5F-8A9B-000000000002}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3BE24834-DFFF-4680-909D-3B0318ADE824}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronTaskRunner.Core.Tests", "tests\CronTaskRunner.Core.Tests\CronTaskRunner.Core.Tests.csproj", "{0FDA6D31-AB61-4F79-AC71-A15EF8144416}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronTaskRunner.Sample.Tests", "tests\CronTaskRunner.Sample.Tests\CronTaskRunner.Sample.Tests.csproj", "{F3341CF2-A958-4FF2-AA62-8F7220937221}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1B2C3D4-0001-4E5F-8A9B-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-0001-4E5F-8A9B-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-0001-4E5F-8A9B-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-0001-4E5F-8A9B-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-0002-4E5F-8A9B-000000000002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-0002-4E5F-8A9B-000000000002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-0002-4E5F-8A9B-000000000002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-0002-4E5F-8A9B-000000000002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FDA6D31-AB61-4F79-AC71-A15EF8144416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FDA6D31-AB61-4F79-AC71-A15EF8144416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FDA6D31-AB61-4F79-AC71-A15EF8144416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FDA6D31-AB61-4F79-AC71-A15EF8144416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3341CF2-A958-4FF2-AA62-8F7220937221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3341CF2-A958-4FF2-AA62-8F7220937221}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3341CF2-A958-4FF2-AA62-8F7220937221}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3341CF2-A958-4FF2-AA62-8F7220937221}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0FDA6D31-AB61-4F79-AC71-A15EF8144416} = {3BE24834-DFFF-4680-909D-3B0318ADE824}
+		{F3341CF2-A958-4FF2-AA62-8F7220937221} = {3BE24834-DFFF-4680-909D-3B0318ADE824}
+	EndGlobalSection
+EndGlobal

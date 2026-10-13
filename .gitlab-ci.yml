@@ -1,0 +1,12 @@
+variables:
+  PATH_DOCKERFILE: "src/CronTaskRunner.Sample"
+  SYSTEM_NAME: "igate"
+  PROJECT_NAME: "sverka"
+  BUILD_FILE_PATH: "src/CronTaskRunner.Sample/CronTaskRunner.Sample.csproj"
+  DISABLE_TEST: false
+  #DISABLE_SONAR: false
+
+include:
+  - project: invest_banking/tech/cicd
+    file:
+      - 'gitlab-templates/pipelines/dotnet.yml'
